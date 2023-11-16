@@ -1,4 +1,4 @@
-import react from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const Header = styled.header`
@@ -43,12 +43,23 @@ const Preview = styled.div`
   width: 50vw;
 `;
 
+const StorageKey = "pages/editor:text";
 export const Editor: React.FC = () => {
+  const [text, setText] = useState<string>(
+    localStorage.getItem(StorageKey) || "",
+  );
   return (
     <>
       <Header>Markdonw Editor</Header>
       <Wrapper>
-        <TextArea value="テキスト入力エリア" />
+        <TextArea
+          onChange={(event) => {
+            const changedText = event.target.value;
+            localStorage.setItem(StorageKey, changedText);
+            setText(changedText);
+          }}
+          value={text}
+        />
         <Preview>プレビューエリア</Preview>
       </Wrapper>
     </>
