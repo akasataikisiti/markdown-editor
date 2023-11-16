@@ -5,8 +5,11 @@ import { putMemo } from "../indexeddb/memos";
 import { Button } from "../components/button";
 
 const Header = styled.header`
+  align-content: center;
+  display: flex;
   font-size: 1.5rem;
   height: 2rem;
+  justify-content: center;
   left: 0;
   line-height: 2rem;
   padding: 0.5rem 1rem;
