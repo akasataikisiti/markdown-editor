@@ -1,13 +1,33 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "../components/button";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { Header } from "../components/header";
+
+const HeaderArea = styled.div`
+  position: fixed;
+  right: 0;
+  top: 0;
+  left: 0;
+`;
+
+const Wrapper = styled.div`
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 3rem;
+  padding: 0 1rem;
+`;
 
 export const History: React.FC = () => {
-  const navigate = useNavigate();
   return (
     <>
-      <h1>Historyee</h1>
-      <Button onClick={() => navigate("/editor")}>エディタに戻る</Button>
+      <HeaderArea>
+        <Header title="履歴">
+          <Link to="/editor">エディタに戻る</Link>
+        </Header>
+      </HeaderArea>
+      <Wrapper>TODO: 履歴を表示</Wrapper>
     </>
   );
 };
