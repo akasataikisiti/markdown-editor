@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Header } from "../components/header";
 import { MemoRecord, getMemos } from "../indexeddb/memos";
@@ -42,9 +42,14 @@ const MemoText = styled.div`
   white-space: nowrap;
 `;
 
-export const History: React.FC = () => {
+interface Props {
+  setText: (text: string) => void;
+}
+
+export const History: React.FC<Props> = (props) => {
+  const { setText } = props;
   const [memos, setMemos] = useState<MemoRecord[]>([]);
-  console.log(memos);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getMemos().then(setMemos);
@@ -59,7 +64,13 @@ export const History: React.FC = () => {
       </HeaderArea>
       <Wrapper>
         {memos.map((memo) => (
-          <Memo key={memo.datetime}>
+          <Memo
+            key={memo.datetime}
+            onClick={() => {
+              setText(memo.text);
+              navigate("/editor");
+            }}
+          >
             <MemoTitle>{memo.title}</MemoTitle>
             <MemoText>{memo.text}</MemoText>
           </Memo>
