@@ -2,10 +2,13 @@ import styled from "styled-components";
 import ReactMarkdown from "react-markdown";
 import { putMemo } from "../indexeddb/memos";
 import { Button } from "../components/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SaveModal } from "../components/save_modal";
 import { Link } from "react-router-dom";
 import { Header } from "../components/header";
+import TestWorker from "../worker/test?worker";
+
+const testWorker = new TestWorker();
 
 const Wrapper = styled.div`
   bottom: 0;
@@ -52,8 +55,18 @@ interface Props {
 }
 export const Editor: React.FC<Props> = (props) => {
   const { text, setText } = props;
-
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    testWorker.onmessage = (e) => {
+      console.log("Main thread Received:", e.data);
+    };
+  }, []);
+
+  useEffect(() => {
+    testWorker.postMessage(text);
+  }, [text]);
+
   return (
     <>
       <HeaderArea>
