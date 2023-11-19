@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { SaveModal } from "../components/save_modal";
 import { Link } from "react-router-dom";
 import { Header } from "../components/header";
-import TestWorker from "../worker/test?worker";
+import ConvertMarkdownWorker from "../worker/convert_markdown_worker?worker";
 
-const testWorker = new TestWorker();
+const convertMarkdownWorker = new ConvertMarkdownWorker();
 
 const Wrapper = styled.div`
   bottom: 0;
@@ -56,15 +56,16 @@ interface Props {
 export const Editor: React.FC<Props> = (props) => {
   const { text, setText } = props;
   const [showModal, setShowModal] = useState(false);
+  const [html, setHtml] = useState("");
 
   useEffect(() => {
-    testWorker.onmessage = (e) => {
-      console.log("Main thread Received:", e.data);
+    convertMarkdownWorker.onmessage = (e) => {
+      setHtml(e.data.html);
     };
   }, []);
 
   useEffect(() => {
-    testWorker.postMessage(text);
+    convertMarkdownWorker.postMessage(text);
   }, [text]);
 
   return (
@@ -83,7 +84,7 @@ export const Editor: React.FC<Props> = (props) => {
           value={text}
         />
         <Preview>
-          <ReactMarkdown>{text}</ReactMarkdown>
+          <div dangerouslySetInnerHTML={{ __html: html }} />
         </Preview>
       </Wrapper>
       {showModal && (
